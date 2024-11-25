@@ -197,7 +197,7 @@ function loop() {
    * @description : main function
    */
 
-  players = {
+  const players = {
     player: {},
     computer: {},
   };
