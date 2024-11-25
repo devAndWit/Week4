@@ -1,6 +1,7 @@
-//Task
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Task
 // Rock Paper Scissors
-
+//
 //     Description: Implement a basic Rock Paper Scissors game.
 //     Requirements:
 //         The program should take the player’s move as an input from process.argv.
@@ -10,6 +11,7 @@
 //     Example:
 //         node rockPaperScissors.js rock
 //         # Output: You chose rock. Computer chose scissors. You win!
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 const readline = require("readline");
 
@@ -20,18 +22,31 @@ const gameInterface = readline.createInterface({
 });
 
 function getTaskText() {
+  /**
+   * @description : return the task string
+   * @returns {string}
+   */
+
   let taskText =
     "\nPlease enter:\n  '1' - for Rock\n  '2' - for Paper\n  '3' - for Scissor\nOR\n  'q' - for quit. \n\n Enter here your choice: ";
   return taskText;
 }
 
 function getOutputText(state, choices) {
+  /**
+   * @description : get output depend from value of state
+   * @param {int} state : state of winchecking as integer
+   * @param {Object:Players} choices : values from the players choices as object
+   * @returns {string} : the outputstring for console
+   */
+
   // console.log("\x1b[41m RED \x1b[0m")
   // console.log("\x1b[42m GREEN \x1b[0m")
   // console.log("\x1b[43m YELLOW \x1b[0m")
 
   let output = "";
 
+  // -1 = state error
   if (state == -1) {
     output += "\n";
     output += "+++++++++++++++++++++++++++++++++++++++++++";
@@ -102,50 +117,86 @@ function getOutputText(state, choices) {
 }
 
 function valueToText(val) {
+  /**
+   * @description : return the string depend from value
+   * @returns {string} : value as string
+   */
+
   const values = {
     1: "rock",
     2: "paper",
     3: "scissor",
   };
+
   return values[val];
 }
 
 function generateComputerChoice() {
+  /**
+   * @description : generate a number between 1 - 3
+   * @returns {int} : return integer
+   */
+
   let randomNumber = 0;
+
   randomNumber = Math.floor(Math.random() * 3 + 1);
+
   return randomNumber;
 }
 
-const isValidateAnswer = (answer) => {
+const isValidAnswer = (answer) => {
+  /**
+   * @description : checks whether the user's input matches the defined responses.
+   * @param {string} state : state of winchecking as integer
+   * @returns {bool} : return true if the user´s input match the defined responses, otherwise return false.
+   */
+
   const validAnswer = ["1", "2", "3", "q"];
+
   return validAnswer.includes(answer);
 };
 
-const getResultPlayerVSComputer = (players) => {
+const getResultPlayerVsComputer = (players) => {
+  /**
+   * @description : checks the players selection with the computer selection
+   * @param {Object:Players} players : object with players and computer values
+   * @returns {int} : return 1 for draw, 2 for player lose, 3 for player win
+   */
+
+  const DRAW = 1;
+  const LOSE = 2;
+  const WIN = 3;
+
   // draw
   if (players.player.value === players.computer.value) {
-    return 1;
+    return DRAW;
   }
 
   // win
+  // rock - scissor = win
   if (players.player.value === 1 && players.computer.value === 3) {
-    return 3;
+    return WIN;
   }
 
+  // paper - rock = win
   if (players.player.value === 2 && players.computer.value === 1) {
-    return 3;
+    return WIN;
   }
 
+  // scissor - paper = win
   if (players.player.value === 3 && players.computer.value === 2) {
-    return 3;
+    return WIN;
   }
 
   // lose
-  return 2;
+  return LOSE;
 };
 
 function loop() {
-  // isValid = false;
+  /**
+   * @description : main function
+   */
+
   players = {
     player: {},
     computer: {},
@@ -154,28 +205,29 @@ function loop() {
   gameInterface.question(getTaskText(), (answer) => {
     console.clear();
 
-    answer = answer.trim();
+    answer = answer.trim().toLowerCase();
 
-    if (isValidateAnswer(answer) === false) {
+    if (isValidAnswer(answer) === false) {
       // Error Output
       console.log(getOutputText(-1));
     } else {
-      if (answer.toLowerCase() === "q") {
+      // lowercase "q" and uppercase "Q" quit the game
+      if (answer === "q") {
         // Quit Output
         console.log(getOutputText(0));
         gameInterface.close(); // Beendet den readline-Prozess
         return;
       }
 
-      if (answer.toLowerCase() === "1") {
+      if (answer === "1") {
         players.player.value = 1;
       }
 
-      if (answer.toLowerCase() === "2") {
+      if (answer === "2") {
         players.player.value = 2;
       }
 
-      if (answer.toLowerCase() === "3") {
+      if (answer === "3") {
         players.player.value = 3;
       }
 
@@ -183,8 +235,8 @@ function loop() {
       players.computer.value = generateComputerChoice();
       players.computer.text = valueToText(players.computer.value);
 
-      let result = getResultPlayerVSComputer(players);
-      console.log(getOutputText(result, players));
+      let state = getResultPlayerVsComputer(players);
+      console.log(getOutputText(state, players));
     }
 
     loop(); // restart the loop
