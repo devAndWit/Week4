@@ -1,24 +1,50 @@
 // decrypt Text = entschlüsselter Text
 // encrypt text = verschlüsselter Text
 
-let klartext = "abc";
-let codetext = "";
-let versatz = -5;
+class aw_crypt {
+  shift = 0;
+  decryptLetters = "abcdefghiklmnopqrstuvwxyz";
+  encryptLetters = "";
+  decryptText = "";
+  encryptText = "";
 
-let lowerCaseLetter = "abcdefghiklmnopqrstuvwxyz";
-let upperCaseLetter = lowerCaseLetter.toUpperCase();
-let base = lowerCaseLetter.charCodeAt(0);
+  constructor(shift) {
+    this.setLetterShift(shift);
+    this.createAlphabet();
+  }
 
-for (let i = 0; i < lowerCaseLetter.length; i++) {
-  let clear = lowerCaseLetter.charCodeAt(i);
-  let code = (clear % base) + versatz;
+  setLetterShift(number) {
+    this.shift = number % 26;
+  }
 
-  console.log(code);
+  setKlartext(text) {
+    klartext = text.trim();
+  }
+
+  createAlphabet() {
+    for (let i = 0; i < this.decryptLetters.length; i++) {
+      let code = (i + this.shift) % 25;
+
+      if (code < 0) {
+        code = code + 25;
+      }
+      this.encryptLetters += String.fromCharCode(code + 97);
+    }
+
+    this.decryptLetters =
+      this.decryptLetters + this.decryptLetters.toUpperCase();
+
+    this.encryptLetters =
+      this.encryptLetters + this.encryptLetters.toUpperCase();
+  }
+
+  getInfo() {
+    console.log("letter shift: " + this.shift);
+    console.log("decrypt alphabet: " + this.decryptLetters);
+    console.log("encrypt alphabet: " + this.encryptLetters);
+  }
 }
 
-console.log("Kleinbuchstaben : ", lowerCaseLetter);
-console.log("Großbuchstaben : ", upperCaseLetter);
-console.log("Base : ", base);
-console.log("Versatz : ", versatz);
+let obj = new aw_crypt(2);
 
-// codieren(klartext);
+obj.getInfo();
