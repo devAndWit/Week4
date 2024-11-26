@@ -1,16 +1,24 @@
-const readline = require("readline");
+// decrypt Text = entschlüsselter Text
+// encrypt text = verschlüsselter Text
 
-// Erstelle eine Schnittstelle für die Eingabe/Ausgabe
-const gameInterface = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+let klartext = "abc";
+let codetext = "";
+let versatz = -5;
 
-gameInterface.question(getTaskText(), (answer) => {
-  answer = answer.trim();
+let lowerCaseLetter = "abcdefghiklmnopqrstuvwxyz";
+let upperCaseLetter = lowerCaseLetter.toUpperCase();
+let base = lowerCaseLetter.charCodeAt(0);
 
-  loop(); // restart the loop
-});
+for (let i = 0; i < lowerCaseLetter.length; i++) {
+  let clear = lowerCaseLetter.charCodeAt(i);
+  let code = (clear % base) + versatz;
 
-// start the loop
-loop();
+  console.log(code);
+}
+
+console.log("Kleinbuchstaben : ", lowerCaseLetter);
+console.log("Großbuchstaben : ", upperCaseLetter);
+console.log("Base : ", base);
+console.log("Versatz : ", versatz);
+
+// codieren(klartext);
