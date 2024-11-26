@@ -5,20 +5,20 @@ class aw_crypt {
   shift = 0;
   decryptLetters = "abcdefghiklmnopqrstuvwxyz";
   encryptLetters = "";
-  decryptText = "";
-  encryptText = "";
+  decryptText = "TEST_1";
+  encryptText = "TEST_2";
 
   constructor(shift) {
     this.setLetterShift(shift);
     this.createAlphabet();
   }
 
-  setLetterShift(number) {
-    this.shift = number % 26;
+  setLetterShift(shift) {
+    this.shift = shift % 26;
   }
 
-  setKlartext(text) {
-    klartext = text.trim();
+  setKlartext(decryptText) {
+    this.encryptText = decryptText.trim();
   }
 
   createAlphabet() {
@@ -39,9 +39,33 @@ class aw_crypt {
   }
 
   getInfo() {
-    console.log("letter shift: " + this.shift);
-    console.log("decrypt alphabet: " + this.decryptLetters);
-    console.log("encrypt alphabet: " + this.encryptLetters);
+    let output = "";
+    output =
+      "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+    output += "\n\n";
+    output += "  letter shift: " + this.shift;
+    output += "\n";
+    output += "  decrypt alphabet: " + this.decryptLetters;
+    output += "\n";
+    output += "  encrypt alphabet: " + this.encryptLetters;
+    output += "\n\n";
+    output +=
+      "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+    if (this.encryptText.length > 0) {
+      output += "\n\n";
+      output += "  decrypt message:";
+      output += "\n";
+      output += "    " + this.decryptText;
+      output += "\n\n";
+      output += "  encrypt message:";
+      output += "\n";
+      output += "    " + this.encryptText;
+      output += "\n\n";
+      output +=
+        "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+    }
+
+    console.log(output);
   }
 }
 
