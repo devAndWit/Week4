@@ -1,34 +1,49 @@
 // decrypt Text = entschlüsselter Text
 // encrypt text = verschlüsselter Text
 
-class aw_crypt {
+class AW_Crypt {
   shift = 0;
-  decryptLetters = "abcdefghiklmnopqrstuvwxyz";
+  alphabetBase = 97;
+  decryptLetters = "abcdefghijklmnopqrstuvwxyz";
   encryptLetters = "";
-  decryptText = "TEST_1";
-  encryptText = "TEST_2";
+  decryptText = "";
+  encryptText = "";
+  alphabetTable = {};
 
-  constructor(shift) {
+  /**
+   *
+   * @param {int} shift letter shift as integer
+   * @return void
+   */
+  constructor(shift = 0) {
     this.setLetterShift(shift);
     this.createAlphabet();
+    this.createAlphabetTable();
   }
 
+  /**
+   *
+   * @param {int} shift letter shift as (positive or negative) integer
+   * @return void
+   */
   setLetterShift(shift) {
     this.shift = shift % 26;
   }
 
-  setKlartext(decryptText) {
+  setEncryptText(decryptText) {
     this.encryptText = decryptText.trim();
   }
 
   createAlphabet() {
+    this.encryptLetters = "";
+
     for (let i = 0; i < this.decryptLetters.length; i++) {
-      let code = (i + this.shift) % 25;
+      let code = (i + this.shift) % 26;
 
       if (code < 0) {
-        code = code + 25;
+        code = code + 26;
       }
-      this.encryptLetters += String.fromCharCode(code + 97);
+      this.encryptLetters += String.fromCharCode(code + this.alphabetBase);
     }
 
     this.decryptLetters =
@@ -36,6 +51,32 @@ class aw_crypt {
 
     this.encryptLetters =
       this.encryptLetters + this.encryptLetters.toUpperCase();
+  }
+
+  createAlphabetTable() {
+    this.alphabetTable = {};
+    for (let i = 0; i < this.decryptLetters.length; i++) {
+      this.alphabetTable[this.decryptLetters[i]] = {
+        decrypt: this.decryptLetters[i],
+        encrypt: this.encryptLetters[i],
+      };
+    }
+    console.log(this.alphabetTable);
+  }
+
+  createEncryptText(decryptText) {
+    decryptText = decryptText.trim();
+    let encryptText = "";
+
+    for (let i = 0; i < decryptText.length; i++) {
+      if (!this.alphabetTable[decryptText[i]]) {
+        encryptText += decryptText[i];
+      } else {
+        encryptText += this.alphabetTable[decryptText[i]].encrypt;
+      }
+    }
+    this.decryptText = decryptText;
+    this.encryptText = encryptText;
   }
 
   getInfo() {
@@ -69,6 +110,6 @@ class aw_crypt {
   }
 }
 
-let obj = new aw_crypt(2);
-
+let obj = new AW_Crypt(2);
+obj.createEncryptText("Dies ist ein Test");
 obj.getInfo();
