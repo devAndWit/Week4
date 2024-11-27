@@ -21,25 +21,23 @@ const gameInterface = readline.createInterface({
   output: process.stdout,
 });
 
+/**
+ * @description : return the task string
+ * @returns {string}
+ */
 function getTaskText() {
-  /**
-   * @description : return the task string
-   * @returns {string}
-   */
-
   let taskText =
     "\nPlease enter:\n  '1' - for Rock\n  '2' - for Paper\n  '3' - for Scissor\nOR\n  'q' - for quit. \n\n Enter here your choice: ";
   return taskText;
 }
 
+/**
+ * @description : get output depend from value of state
+ * @param {int} state : state of winchecking as integer
+ * @param {Object:Players} choices : values from the players choices as object
+ * @returns {string} : the outputstring for console
+ */
 function getOutputText(state, choices) {
-  /**
-   * @description : get output depend from value of state
-   * @param {int} state : state of winchecking as integer
-   * @param {Object:Players} choices : values from the players choices as object
-   * @returns {string} : the outputstring for console
-   */
-
   // console.log("\x1b[41m RED \x1b[0m")
   // console.log("\x1b[42m GREEN \x1b[0m")
   // console.log("\x1b[43m YELLOW \x1b[0m")
@@ -116,12 +114,11 @@ function getOutputText(state, choices) {
   }
 }
 
+/**
+ * @description : return the string depend from value
+ * @returns {string} : value as string
+ */
 function valueToText(val) {
-  /**
-   * @description : return the string depend from value
-   * @returns {string} : value as string
-   */
-
   const values = {
     1: "rock",
     2: "paper",
@@ -131,12 +128,11 @@ function valueToText(val) {
   return values[val];
 }
 
+/**
+ * @description : generate a number between 1 - 3
+ * @returns {int} : return integer
+ */
 function generateComputerChoice() {
-  /**
-   * @description : generate a number between 1 - 3
-   * @returns {int} : return integer
-   */
-
   let randomNumber = 0;
 
   randomNumber = Math.floor(Math.random() * 3 + 1);
@@ -144,25 +140,23 @@ function generateComputerChoice() {
   return randomNumber;
 }
 
+/**
+ * @description : checks whether the user's input matches the defined responses.
+ * @param {string} state : state of winchecking as integer
+ * @returns {bool} : return true if the user´s input match the defined responses, otherwise return false.
+ */
 const isValidAnswer = (answer) => {
-  /**
-   * @description : checks whether the user's input matches the defined responses.
-   * @param {string} state : state of winchecking as integer
-   * @returns {bool} : return true if the user´s input match the defined responses, otherwise return false.
-   */
-
   const validAnswer = ["1", "2", "3", "q"];
 
   return validAnswer.includes(answer);
 };
 
+/**
+ * @description : checks the players selection with the computer selection
+ * @param {Object:Players} players : object with players and computer values
+ * @returns {int} : return 1 for draw, 2 for player lose, 3 for player win
+ */
 const getResultPlayerVsComputer = (players) => {
-  /**
-   * @description : checks the players selection with the computer selection
-   * @param {Object:Players} players : object with players and computer values
-   * @returns {int} : return 1 for draw, 2 for player lose, 3 for player win
-   */
-
   const DRAW = 1;
   const LOSE = 2;
   const WIN = 3;
@@ -192,11 +186,10 @@ const getResultPlayerVsComputer = (players) => {
   return LOSE;
 };
 
+/**
+ * @description : main function
+ */
 function loop() {
-  /**
-   * @description : main function
-   */
-
   const players = {
     player: {},
     computer: {},
