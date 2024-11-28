@@ -32,34 +32,79 @@ class PigLatin {
   normalText = "";
   pigText = "";
   arrWords = [];
+  pigWords = [];
 
-  constructor() {}
+  constructor() {
+    this.clearAllValues();
+  }
 
   clearAllValues() {
     this.normalText = "";
     this.pigText = "";
     this.arrWords = [];
+    this.pigWords = [];
   }
 
-  setText(text) {
-    this.normalText = text.trim();
-    this.setArrWords(this.normalText);
+  setText(text = "") {
+    this.normalText = text.toLowerCase().trim();
+    this.setArrWords();
     this.translate();
   }
 
-  setArrWords(text) {
-    this.arrWords = this.normalText.split(" ");
+  setArrWords() {
+    if (this.normalText.length > 0) {
+      this.arrWords = this.normalText.split(" ");
+    }
+  }
+
+  setPigText() {
+    this.pigText = this.pigWords.join(" ");
+  }
+
+  setPigWords(arr = []) {
+    this.pigWords = arr;
+    this.setPigText();
   }
 
   translate() {
-    this.arrWords.forEach((word) => {
-        
-    });
-  }
+    let newWords = [];
 
-  getTemp() {
-    console.log(this.normalText);
-    console.log(this.arrWords.join(" "));
+    this.arrWords.forEach((word) => {
+      let pattern = /[aeiou]/g;
+      let res = pattern.exec(word);
+
+      if (res && res.index === 0) {
+        // erster vokal
+        word = word + "way";
+
+        newWords.push(word);
+        return;
+      }
+
+      if (res && res.index === 1) {
+        let pre = word.substring(0, 1);
+
+        word = word.substring(1);
+        word = word + pre + "ay";
+
+        newWords.push(word);
+        return;
+      }
+
+      if (res && res.index === 2) {
+        let pre = word.substring(0, 2);
+
+        word = word.substring(2);
+        word = word + pre + "ay";
+
+        newWords.push(word);
+        return;
+      }
+
+      newWords.push(word);
+    });
+
+    this.setPigWords(newWords);
   }
 
   getOutputText(type) {
@@ -84,9 +129,9 @@ class PigLatin {
         output +=
           "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
         output += "\n";
-        output += "   Your message:" + this.normalText;
+        output += "   Your message: " + this.normalText;
         output += "\n";
-        output += "   Pig Latin:" + this.pigText;
+        output += "   Pig Latin:    " + this.pigText;
         output += "\n";
         output +=
           "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
@@ -100,31 +145,28 @@ class PigLatin {
 
 let obj = new PigLatin();
 
-obj.setText("Pig Latin is hard to speak");
-obj.getTemp();
+process.stdout.write(obj.getOutputText(1));
 
-// process.stdout.write(obj.getOutputText(1));
+process.stdin.setEncoding("utf8");
 
-// process.stdin.setEncoding("utf8");
+let state = 1;
 
-// let state = 1;
+process.stdin.on("data", (input) => {
+  input = input.toString().trim();
 
-// process.stdin.on("data", (input) => {
-//   input = input.toString().trim();
+  if (state === 1) {
+    if (input.length > 0) {
+      obj.setText(input);
+      state = 2;
+    } else {
+      console.clear();
+      process.stdout.write(obj.getOutputText(1));
+    }
+  }
 
-//   if (state === 1) {
-//     if (input.length > 0) {
-//       obj.setText(input);
-//       state = 2;
-//     } else {
-//       console.clear();
-//       process.stdout.write(obj.getOutputText(1));
-//     }
-//   }
-
-//   if (state === 2) {
-//     console.clear();
-//     process.stdout.write(obj.getOutputText(2));
-//     process.exit(null);
-//   }
-// });
+  if (state === 2) {
+    console.clear();
+    process.stdout.write(obj.getOutputText(2));
+    process.exit(null);
+  }
+});
